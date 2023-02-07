@@ -1,0 +1,24 @@
+//admin api
+
+@url = http://localhost:8000/api/v1
+
+
+POST {{url}}/admin/register
+Content-Type: application/json
+
+//Now copy the data from console log from registratio page
+{"address": "1 george st Sydney",
+
+"email"
+: 
+"Shital@gmail.com",
+"fName"
+: 
+"Shital",
+"lName"
+: 
+"Rayamajhi",
+"password"
+: 
+"Live@123",
+"phone": "12343456"}
