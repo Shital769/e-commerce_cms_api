@@ -1,7 +1,7 @@
 // Use at least Nodemailer v4.1.0
 import nodemailer from "nodemailer";
 
-//configure and sent email
+//configure and send email
 
 const sendEmail = async (emailBody) => {
   try {
@@ -53,12 +53,12 @@ export const newAccountEmailVerificationEmail = (link, obj) => {
 };
 
 //email verification notification
-export const emailVerifiedNotification = ({fName, email}) => {
+export const emailVerifiedNotification = ({ fName, email }) => {
   const emailBody = {
     from: `"Coding Shital", <${process.env.EMAIL_USER}>`,
     to: email,
     subject: "Account Verified",
-    text: "Your account has been verrified. You may login now" ,
+    text: "Your account has been verrified. You may login now",
     html: `
         <p>Hello ${fName} </p>
         <br>

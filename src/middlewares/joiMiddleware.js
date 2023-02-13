@@ -12,7 +12,7 @@ export const newAdminValidation = (req, res, next) => {
       fName: Joi.string().required(),
       lName: Joi.string().required(),
       password: Joi.string().required(),
-      phone: Joi.string().allow("", null)
+      phone: Joi.string().allow("", null),
     });
 
     //compare
@@ -38,6 +38,29 @@ export const emailVerificationValidation = (req, res, next) => {
     });
 
     //compair
+    const { error } = schema.validate(req.body);
+
+    error
+      ? res.json({
+          status: "error",
+          message: error.message,
+        })
+      : next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+//login
+export const loginValidation = (req, res, next) => {
+  try {
+    //conditions
+    const schema = Joi.object({
+      email: Joi.string().email({ minDomainSegments: 2 }),
+      password: Joi.string().required(),
+    });
+
+    //compare
     const { error } = schema.validate(req.body);
 
     error

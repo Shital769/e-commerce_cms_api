@@ -1,24 +1,53 @@
 import express from "express";
+const router = express.Router();
+import { v4 as uuidv4 } from "uuid";
 import {
   emailVerificationValidation,
   newAdminValidation,
+  loginValidation,
 } from "../middlewares/joiMiddleware.js";
-const router = express.Router();
-import { createNewAdmin, updateAdmin } from "../models/admin/AdminModel.js";
-import { hashPassword } from "../util/bcrypt.js";
-import { v4 as uuidv4 } from "uuid";
+import {
+  createNewAdmin,
+  updateAdmin,
+  findUser,
+} from "../models/admin/AdminModel.js";
+import { hashPassword, comparePassword } from "../util/bcrypt.js";
 import {
   newAccountEmailVerificationEmail,
   emailVerifiedNotification,
 } from "../util/nodemailer.js";
-// import {dotenv} from ".env"
 
 //admin user login
-router.post("/", (req, res, next) => {
+router.post("/login", loginValidation, async (req, res, next) => {
   try {
+    const { email, password } = req.body;
+
+    //find udser by email
+
+    const user = await findUser({ email });
+    if (user?._id) {
+      //check if plain password and hashed password are mathced or not
+      const isPasswordMtach = await comparePassword(password, user.password);
+
+      // console.log(isPasswordMtach, "=====");
+
+      //login successful or invalid login details
+
+      if (isPasswordMtach) {
+        //here, user will not see password and version after login  by making them undefined
+        user.password = undefined;
+        user.__v = undefined;
+        res.json({
+          status: "success",
+          message: "Login success!!!",
+          user,
+        });
+        return;
+      }
+    }
     res.json({
-      status: "success",
-      message: "todo login",
+      status: "error",
+      message: "Invalid Login Details",
     });
   } catch (error) {
     next(error);
