@@ -11,7 +11,7 @@ const sendEmail = async (emailBody) => {
       port: 587,
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.emv.EMAIL_PASS,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
@@ -21,7 +21,7 @@ const sendEmail = async (emailBody) => {
     console.log("Message Sent: %s", info.messageId);
     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 };
 
@@ -29,7 +29,7 @@ const sendEmail = async (emailBody) => {
 export const newAccountEmailVerificationEmail = (link, obj) => {
   const emailBody = {
     from: `"Coding Shital", <${obj.email}>`,
-    to: process.env.EMAIL_PASS,
+    to: process.env.EMAIL_USER,
     subject: "Verify Your Email",
     text: "Please follow the link to verify your account" + link,
     html: `
@@ -39,19 +39,42 @@ export const newAccountEmailVerificationEmail = (link, obj) => {
         Please follow the link to verify your account
         </p>
         <br>
-
         <p>
-        Hi <a href = ${link} > ${link}</a>
+        Hi <a href = ${link}>${link}</a>
         </p>
         <br>
         <p>
         Regards,
         <br>
         Coding Shital Support Team</p>
-
-
-        
-        
         `,
   };
+  sendEmail(emailBody);
+};
+
+//email verification notification
+export const emailVerifiedNotification = ({fName, email}) => {
+  const emailBody = {
+    from: `"Coding Shital", <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: "Account Verified",
+    text: "Your account has been verrified. You may login now" ,
+    html: `
+        <p>Hello ${fName} </p>
+        <br>
+        <p>
+        Your account has been verified. You may login now
+        </p>
+        <br>
+        <p>
+        Hi <a href = "${process.env.FRONTEND_ROOT_URL}" style = "background:green; color: white; padding:1rem 2.5px">Login</a>
+        </p>
+        <br>
+        <p>
+        Regards,
+        <br>
+        Coding Shital Support Team</p>
+        `,
+  };
+  sendEmail(emailBody);
 };

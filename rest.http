@@ -22,3 +22,5 @@ Content-Type: application/json
 : 
 "Live@123",
 "phone": "12343456"}
+
+# verify user email
