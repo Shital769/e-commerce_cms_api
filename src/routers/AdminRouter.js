@@ -43,6 +43,7 @@ router.post("/login", loginValidation, async (req, res, next) => {
           user,
         });
         return;
+        //here return will stop the process once login succefull.
       }
     }
     res.json({
