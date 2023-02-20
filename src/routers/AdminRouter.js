@@ -12,13 +12,18 @@ import {
   updateAdmin,
   findUser,
 } from "../models/admin/AdminModel.js";
-import { sessionToken } from "../models/reset-password/SessionTokenModel.js";
+import {
+  createNewSession,
+  deleteSession,
+} from "../models/session/SessionTokenModel.js";
 import { hashPassword, comparePassword } from "../util/bcrypt.js";
 import {
   newAccountEmailVerificationEmail,
   emailVerifiedNotification,
-  resetPasswordNotification,
+  emailOtp,
+  passwordUpdateNotification,
 } from "../util/nodemailer.js";
+import { numString } from "../util/randomGenerator.js";
 
 //admin user login
 router.post("/login", loginValidation, async (req, res, next) => {
@@ -128,35 +133,82 @@ router.post("/verify", emailVerificationValidation, async (req, res, next) => {
   }
 });
 
+//OTP request
+router.post("/request-otp", async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.json({
+        status: "error",
+        message: "Invalid request",
+      });
+    }
+
+    const user = await findUser({ email });
+    if (user?._id) {
+      //create OTP (6 digit code)
+      const token = numString(6);
+      const obj = {
+        token,
+        associate: email,
+      };
+
+      //store otp and email in a new table calles sessions in database
+      const result = await createNewSession(obj);
+
+      if (result?._id) {
+        //send that otp to their email
+        emailOtp({ email, token });
+
+        return res.json({
+          status: "success",
+          message:
+            "We have sent you an OTP to your email, check your email and fill up the form below",
+        });
+      }
+    }
+    res.json({
+      status: "error",
+      message: "Wrong email",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 //request link for reset password
 router.post(
   "/reset-password",
   resetPassswordValidation,
   async (req, res, next) => {
     try {
-      const userEmail = await findUser(req.body);
-      console.log(userEmail);
+      const { email, otp, password } = req.body;
 
-      //create a token
-      const generateOneTimePassword = (n) =>
-        String(Math.ceil(Math.random() * 10 ** n)).padStart(6, "0");
-      // n being the lengneth of the random number.
-      console.log(generateOneTimePassword);
+      const deletedToken = await deleteSession({ email, otp });
 
-      const result = sessionToken(association, token);
+      if (deletedToken?._id) {
+        //encrypt password and upadte password
+        const user = await updateAdmin(
+          { email },
+          { password: hashPassword(password) }
+        );
 
-      if (userEmail?._id) {
-        resetPasswordNotification(userEmail);
+        if (user?._id) {
+          //send email notification
+          passwordUpdateNotification(user);
 
-        res.json({
-          status: "success",
-          message: "Your password will be reset ",
-        });
-        return;
+          return res.json({
+            status: "success",
+            message: "Your password has been updated successfully",
+          });
+        }
       }
+
       res.json({
         status: "error",
-        message: "The link is invalid or expired.",
+        message:
+          "We are unable to reset your password at this time. Invalid or expired token",
       });
     } catch (error) {
       next(error);

@@ -37,7 +37,7 @@ export const emailVerificationValidation = (req, res, next) => {
       emailVerificationCode: Joi.string().required(),
     });
 
-    //compair
+    //compare
     const { error } = schema.validate(req.body);
 
     error
@@ -80,9 +80,11 @@ export const resetPassswordValidation = (req, res, next) => {
     //conditions
     const schema = Joi.object({
       email: Joi.string().email({ minDomainSegments: 2 }),
+      password: Joi.string().required(),
+      otp: Joi.string().required(),
     });
 
-    //compair
+    //compare
     const { error } = schema.validate(req.body);
 
     error

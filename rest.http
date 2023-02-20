@@ -2,7 +2,7 @@
 
 @url = http://localhost:8000/api/v1
 
-
+//create new admin user
 POST {{url}}/admin/register
 Content-Type: application/json
 
@@ -23,4 +23,10 @@ Content-Type: application/json
 "Live@123",
 "phone": "12343456"}
 
-# verify user email
+# login user
+POST {{url}}/admin/login
+Content-Type: application/json
+{
+    "email":"Shital@gmail.com",
+    "password":"Sr@123"
+}
