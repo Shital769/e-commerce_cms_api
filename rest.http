@@ -6,7 +6,7 @@
 POST {{url}}/admin/register
 Content-Type: application/json
 
-//Now copy the data from console log from registratio page
+//Now copy the data from console log from registration page
 {"address": "1 george st Sydney",
 
 "email"

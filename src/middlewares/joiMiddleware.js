@@ -73,3 +73,25 @@ export const loginValidation = (req, res, next) => {
     next(error);
   }
 };
+
+//reset password validation
+export const resetPassswordValidation = (req, res, next) => {
+  try {
+    //conditions
+    const schema = Joi.object({
+      email: Joi.string().email({ minDomainSegments: 2 }),
+    });
+
+    //compair
+    const { error } = schema.validate(req.body);
+
+    error
+      ? res.json({
+          status: "error",
+          message: error.message,
+        })
+      : next();
+  } catch (error) {
+    next(error);
+  }
+};

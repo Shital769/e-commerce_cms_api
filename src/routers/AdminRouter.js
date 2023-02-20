@@ -5,16 +5,19 @@ import {
   emailVerificationValidation,
   newAdminValidation,
   loginValidation,
+  resetPassswordValidation,
 } from "../middlewares/joiMiddleware.js";
 import {
   createNewAdmin,
   updateAdmin,
   findUser,
 } from "../models/admin/AdminModel.js";
+import { sessionToken } from "../models/reset-password/SessionTokenModel.js";
 import { hashPassword, comparePassword } from "../util/bcrypt.js";
 import {
   newAccountEmailVerificationEmail,
   emailVerifiedNotification,
+  resetPasswordNotification,
 } from "../util/nodemailer.js";
 
 //admin user login
@@ -22,7 +25,7 @@ router.post("/login", loginValidation, async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    //find udser by email
+    //find user by email
 
     const user = await findUser({ email });
     if (user?._id) {
@@ -95,7 +98,7 @@ router.post("/register", newAdminValidation, async (req, res, next) => {
 //admin user email verification
 router.post("/verify", emailVerificationValidation, async (req, res, next) => {
   try {
-    // chek if the combination of email and code exist in db if so set the status active and code to "" in the db, also update is email verified to true
+    // chek if the combination of email and code exist in db, if so set the status active and code to "" in the db, also update is email verified to true
 
     const obj = {
       status: "active",
@@ -124,5 +127,41 @@ router.post("/verify", emailVerificationValidation, async (req, res, next) => {
     next(error);
   }
 });
+
+//request link for reset password
+router.post(
+  "/reset-password",
+  resetPassswordValidation,
+  async (req, res, next) => {
+    try {
+      const userEmail = await findUser(req.body);
+      console.log(userEmail);
+
+      //create a token
+      const generateOneTimePassword = (n) =>
+        String(Math.ceil(Math.random() * 10 ** n)).padStart(6, "0");
+      // n being the lengneth of the random number.
+      console.log(generateOneTimePassword);
+
+      const result = sessionToken(association, token);
+
+      if (userEmail?._id) {
+        resetPasswordNotification(userEmail);
+
+        res.json({
+          status: "success",
+          message: "Your password will be reset ",
+        });
+        return;
+      }
+      res.json({
+        status: "error",
+        message: "The link is invalid or expired.",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default router;

@@ -78,3 +78,30 @@ export const emailVerifiedNotification = ({ fName, email }) => {
   };
   sendEmail(emailBody);
 };
+
+//email for reset password
+export const resetPasswordNotification = (link, obj) => {
+  const emailBody = {
+    from: `"Coding Shital", <${obj.email}>`,
+    to: process.env.EMAIL_USER,
+    subject: "Reset Password Now",
+    text: "Please follow the link to reset your password." + link,
+    html: `
+        <p>Hello ${obj.fName} </p>
+        <br>
+        <p>
+        Please follow the link to reset your password
+        </p>
+        <br>
+        <p>
+        Hi <a href = ${link}>${link}</a>
+        </p>
+        <br>
+        <p>
+        Regards,
+        <br>
+        Coding Shital Support Team</p>
+        `,
+  };
+  sendEmail(emailBody);
+};
