@@ -30,3 +30,11 @@ Content-Type: application/json
     "email":"Shital@gmail.com",
     "password":"Sr@123"
 }
+
+//category mgmt api
+POST {{url}}/categories
+Content-Type: application/json
+
+{
+    "name":"Computer"
+}

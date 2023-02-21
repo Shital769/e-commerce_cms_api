@@ -178,7 +178,7 @@ router.post("/request-otp", async (req, res, next) => {
 });
 
 //request link for reset password
-router.post(
+router.patch(
   "/reset-password",
   resetPassswordValidation,
   async (req, res, next) => {

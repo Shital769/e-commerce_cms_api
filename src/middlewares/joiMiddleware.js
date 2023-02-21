@@ -1,5 +1,6 @@
 import Joi from "joi";
 
+
 export const newAdminValidation = (req, res, next) => {
   try {
     ///some codes here
