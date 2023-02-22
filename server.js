@@ -19,8 +19,8 @@ app.use(morgan("dev"));
 
 //API routers
 import adminRouter from "./src/routers/AdminRouter.js";
-
 app.use("/api/v1/admin", adminRouter);
+
 
 //root url  request
 app.use("/", (req, res, next) => {
