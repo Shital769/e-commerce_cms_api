@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import slugify from "slugify";
-import {createNewCategory, deleteCategory, readCategories, updateCategory} from "../models/category/CategoryModel.js"
+import {createNewCategory, deleteCategory, readCategory, updateCategory} from "../models/category/CategoryModel.js"
 
 //create  category
 router.post("/", async (req, res, next) => {
@@ -44,7 +44,7 @@ router.post("/", async (req, res, next) => {
 //read the category
 router.get("/", async (req, res, next) => {
   try {
-    const categories = await readCategories();
+    const categories = await readCategory();
 
     res.json({
       status: "success",
