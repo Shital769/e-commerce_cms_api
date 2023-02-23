@@ -104,7 +104,7 @@ export const updateCategoryValidation = (req, res, next) => {
   const schema = Joi.object({
     _id: Joi.string().required(),
     name: Joi.string().required(),
-    status: Joi.string.required(),
+    status: Joi.string().required(),
   });
 
   joiValidation(schema, req, res, next);

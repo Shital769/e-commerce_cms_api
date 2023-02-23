@@ -1,7 +1,13 @@
 import express from "express";
 const router = express.Router();
 import slugify from "slugify";
-import {createNewCategory, deleteCategory, readCategory, updateCategory} from "../models/category/CategoryModel.js"
+import { updateCategoryValidation } from "../middlewares/joiMiddleware.js";
+import {
+  createNewCategory,
+  deleteCategory,
+  readCategory,
+  updateCategory,
+} from "../models/category/CategoryModel.js";
 
 //create  category
 router.post("/", async (req, res, next) => {
@@ -57,7 +63,7 @@ router.get("/", async (req, res, next) => {
 });
 
 //update the category
-router.put("/", async (req, res, next) => {
+router.put("/", updateCategoryValidation, async (req, res, next) => {
   try {
     const result = await updateCategory(req.body);
 
