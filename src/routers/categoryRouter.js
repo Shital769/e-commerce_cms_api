@@ -74,6 +74,10 @@ router.put("/", updateCategoryValidation, async (req, res, next) => {
         result,
       });
     }
+    res.json({
+      status: "error",
+      message: "Unanble to update the category, please try again later",
+    });
   } catch (error) {
     next(error);
   }
