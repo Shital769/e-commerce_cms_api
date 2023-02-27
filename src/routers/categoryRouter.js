@@ -1,6 +1,6 @@
 import express from "express";
-const router = express.Router();
 import slugify from "slugify";
+const router = express.Router();
 import { updateCategoryValidation } from "../middlewares/joiMiddleware.js";
 import {
   createNewCategory,
