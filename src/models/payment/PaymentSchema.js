@@ -1,4 +1,4 @@
-import mongoose from "mongoose ";
+import mongoose from "mongoose";
 
 const paymentSchema = new mongoose.Schema(
   {
@@ -21,4 +21,4 @@ const paymentSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Payment", paymentSchema);
+export default mongoose.model("Payments", paymentSchema);

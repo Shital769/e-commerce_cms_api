@@ -20,8 +20,10 @@ app.use(morgan("dev"));
 //API routers
 import adminRouter from "./src/routers/AdminRouter.js";
 import categoryRouter from "./src/routers/categoryRouter.js";
+import paymentMethodRouter from "./src/routers/paymentMethodRouter.js";
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/category", categoryRouter);
+app.use("/api/v1/payment", paymentMethodRouter);
 
 //root url  request
 app.use("/", (req, res, next) => {
