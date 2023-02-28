@@ -9,7 +9,7 @@ export const readPayments = () => {
 };
 
 export const updatePayment = (filter, obj) => {
-  return PaymentSchema.findOneAndUpdate(filter, obj, { new: true });
+  return PaymentSchema.findByIdAndUpdate(filter, obj, { new: true });
 };
 
 export const deletePayment = (_id) => {

@@ -10,7 +10,7 @@ import {
 import { paymentValidation } from "../middlewares/joiMiddleware.js";
 
 //create payment
-router.post("/", paymentValidation, async (req, res, next) => {
+router.post("/",  async (req, res, next) => {
   try {
     const { name } = req.body;
     if (name.length && typeof name === "string") {
