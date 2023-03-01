@@ -78,8 +78,8 @@ export const updateCategoryValidation = (req, res, next) => {
 
 export const paymentValidation = (req, res, next) => {
   const schema = Joi.object({
-    method: Joi.string().required(),
-    description: Joi.string().required(),
+    _id: Joi.string().required(),
+    status: Joi.string().required(),
     name: Joi.string().required(),
   });
   joiValidation(schema, req, res, next);

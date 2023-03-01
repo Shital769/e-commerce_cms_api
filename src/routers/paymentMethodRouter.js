@@ -5,6 +5,7 @@ const router = express.Router();
 import {
   createNewPayment,
   updatePayment,
+  readPayments,
   deletePayment,
 } from "../models/payment/PaymentModel.js";
 import { paymentValidation } from "../middlewares/joiMiddleware.js";
@@ -45,7 +46,7 @@ router.post("/",  async (req, res, next) => {
 //read payment
 router.get("/", async (req, res, next) => {
   try {
-    const { payments } = await readPayments();
+    const payments  = await readPayments();
     res.json({
       status: "success",
       message: "Here is the payment list",
@@ -57,7 +58,7 @@ router.get("/", async (req, res, next) => {
 });
 
 //update payments
-router.put("/", async (req, res, next) => {
+router.put("/", paymentValidation, async (req, res, next) => {
   try {
     const result = await updatePayment(req.body);
 
@@ -93,7 +94,7 @@ router.delete("/:_id", async (req, res, next) => {
   try {
     res.json({
       status: "error",
-      message: "Unable to delete the payment, please try agin later",
+      message: "Unable to delete the payment, please try again later",
     });
   } catch (error) {
     next(error);
