@@ -11,7 +11,7 @@ import {
 import { paymentValidation } from "../middlewares/joiMiddleware.js";
 
 //create payment
-router.post("/",  async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     const { name } = req.body;
     if (name.length && typeof name === "string") {
@@ -39,6 +39,11 @@ router.post("/",  async (req, res, next) => {
       message: "Unable to complete this payment, Please type valid information",
     });
   } catch (error) {
+    if (error.message.includes("E11000 duplicate key error collection")) {
+      error.errorCode = 200;
+      error.message =
+        "This category has been created, change the name and try again later";
+    }
     next(error);
   }
 });
@@ -46,7 +51,7 @@ router.post("/",  async (req, res, next) => {
 //read payment
 router.get("/", async (req, res, next) => {
   try {
-    const payments  = await readPayments();
+    const payments = await readPayments();
     res.json({
       status: "success",
       message: "Here is the payment list",
