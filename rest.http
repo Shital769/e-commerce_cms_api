@@ -28,7 +28,7 @@ POST {{url}}/admin/login
 Content-Type: application/json
 {
     "email":"Shital@gmail.com",
-    "password":"Sr@123"
+    "password":"Sr@1234"
 }
 
 //category mgmt api
