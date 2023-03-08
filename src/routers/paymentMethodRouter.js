@@ -44,7 +44,7 @@ router.get("/", async (req, res, next) => {
     res.json({
       status: "success",
       message: "Here is the payment list",
-      payments,
+     result: payments,
     });
   } catch (error) {
     next(error);
