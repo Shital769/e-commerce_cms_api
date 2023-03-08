@@ -1,5 +1,4 @@
 import express from "express";
-import slugify from "slugify";
 const router = express.Router();
 
 import {
@@ -8,36 +7,26 @@ import {
   readPayments,
   deletePayment,
 } from "../models/payment/PaymentModel.js";
-import { paymentValidation } from "../middlewares/joiMiddleware.js";
+import {
+  updatePaymentValidation,
+  newPaymentValidation,
+} from "../middlewares/joiMiddleware.js";
 
 //create payment
-router.post("/", async (req, res, next) => {
+router.post("/", newPaymentValidation, async (req, res, next) => {
   try {
-    const { name } = req.body;
-    if (name.length && typeof name === "string") {
-      const obj = {
-        name,
-        slug: slugify(name, {
-          lower: true,
-          trim: true,
-        }),
-      };
+    const { _id } = await createNewPayment(req.body);
 
-      const result = await createNewPayment(obj);
-
-      if (result?._id) {
-        return res.json({
+    _id
+      ? res.json({
           status: "success",
-          message: "New payment has been made",
-          result,
+          message: "Payment has been added",
+        })
+      : res.json({
+          status: "error",
+          message:
+            "Error! Sorry we are unable to add new payment method. Please try again later",
         });
-      }
-    }
-
-    res.json({
-      status: "error",
-      message: "Unable to complete this payment, Please type valid information",
-    });
   } catch (error) {
     if (error.message.includes("E11000 duplicate key error collection")) {
       error.errorCode = 200;
@@ -63,7 +52,7 @@ router.get("/", async (req, res, next) => {
 });
 
 //update payments
-router.put("/", paymentValidation, async (req, res, next) => {
+router.put("/", updatePaymentValidation, async (req, res, next) => {
   try {
     const result = await updatePayment(req.body);
 

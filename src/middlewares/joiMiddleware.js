@@ -74,13 +74,21 @@ export const updateCategoryValidation = (req, res, next) => {
   joiValidation(schema, req, res, next);
 };
 
-//payment validation
+// new payment validation
+export const newPaymentValidation = (req, res, next) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    description: Joi.string().required(),
+  });
+};
 
-export const paymentValidation = (req, res, next) => {
+//update payment validation
+export const updatePaymentValidation = (req, res, next) => {
   const schema = Joi.object({
     _id: Joi.string().required(),
     status: Joi.string().required(),
     name: Joi.string().required(),
+    description: Joi.string().required(),
   });
   joiValidation(schema, req, res, next);
 };

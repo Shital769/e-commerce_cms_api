@@ -8,7 +8,7 @@ export const isAuth = (req, res, next) => {
 
     const authorized = false;
 
-    authorized
+  authorized
       ? next()
       : res.status(403).json({
           status: "error",

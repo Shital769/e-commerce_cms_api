@@ -10,14 +10,13 @@ const paymentSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-    },
-  
-
-    slug: {
-      type: String,
-      required: true,
       unique: true,
       index: 1,
+    },
+
+    description: {
+      type: String,
+      required: true,
     },
   },
   {
