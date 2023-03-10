@@ -80,6 +80,7 @@ export const newPaymentValidation = (req, res, next) => {
     name: Joi.string().required(),
     description: Joi.string().required(),
   });
+  joiValidation(schema, req, res, next);
 };
 
 //update payment validation
