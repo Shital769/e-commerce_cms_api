@@ -28,11 +28,6 @@ router.post("/", newPaymentValidation, async (req, res, next) => {
             "Error! Sorry we are unable to add new payment method. Please try again later",
         });
   } catch (error) {
-    if (error.message.includes("E11000 duplicate key error collection")) {
-      error.errorCode = 200;
-      error.message =
-        "This category has been created, change the name and try again later";
-    }
     next(error);
   }
 });
@@ -40,11 +35,11 @@ router.post("/", newPaymentValidation, async (req, res, next) => {
 //read payment
 router.get("/", async (req, res, next) => {
   try {
-    const payments = await readPayments();
+    const result = await readPayments();
     res.json({
       status: "success",
       message: "Here is the payment list",
-     result: payments,
+      result,
     });
   } catch (error) {
     next(error);
