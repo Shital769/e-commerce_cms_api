@@ -17,7 +17,11 @@ import {
   deleteSession,
 } from "../models/session/SessionTokenModel.js";
 import { hashPassword, comparePassword } from "../util/bcrypt.js";
-import { signAccessJWT, signRefreshJWT } from "../util/jwt.js";
+import {
+  signAccessJWT,
+  signRefreshJWT,
+  verifyRefreshJWT,
+} from "../util/jwt.js";
 import {
   newAccountEmailVerificationEmail,
   emailVerifiedNotification,
@@ -25,6 +29,7 @@ import {
   passwordUpdateNotification,
 } from "../util/nodemailer.js";
 import { numString } from "../util/randomGenerator.js";
+import { isAuth } from "../middlewares/authMiddleware";
 
 //admin user login
 router.post("/login", loginValidation, async (req, res, next) => {
@@ -224,5 +229,53 @@ router.patch(
     }
   }
 );
+
+//return user information
+router.get("/user-profile", isAuth, (req, res, next) => {
+  try {
+    const user = req.userInfo;
+    user.password = undefined;
+
+    res.json({
+      status: "success",
+      message: "user found",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+//return new accesJWT
+router.get("new-accessjwt", async (req, res, next) => {
+  try {
+    const { authorization } = req.headers;
+    console.log(req.headers, "hey");
+
+    const { email } = verifyRefreshJWT(authorization);
+
+    if (email) {
+      const user = await findUser({ email });
+
+      if (user?.refreshJWT === authorization) {
+        //create accessJWT and return
+        const accessJWT = await signAccessJWT({ email });
+
+        if (accessJWT) {
+          return res.json({
+            status: "success",
+            accessJWT,
+          });
+        }
+      }
+    }
+
+    res.status(401).json({
+      status: "error",
+      message: "unauthenticated",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default router;

@@ -40,3 +40,13 @@ export const signRefreshJWT = async (payload) => {
 
   return refreshJWT;
 };
+
+export const verifyRefreshJWT = (token) => {
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_REFRESH);
+
+    return decoded;
+  } catch (error) {
+    return "logout";
+  }
+};
