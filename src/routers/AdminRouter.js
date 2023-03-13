@@ -17,6 +17,7 @@ import {
   deleteSession,
 } from "../models/session/SessionTokenModel.js";
 import { hashPassword, comparePassword } from "../util/bcrypt.js";
+import { signAccessJWT, signRefreshJWT } from "../util/jwt.js";
 import {
   newAccountEmailVerificationEmail,
   emailVerifiedNotification,
@@ -43,12 +44,20 @@ router.post("/login", loginValidation, async (req, res, next) => {
 
       if (isPasswordMtach) {
         //here, user will not see password and version after login  by making them undefined
+        //create accessJWT, rerreshJWT
+        //store accessJWT in session table
+        //store refreshJWT in user table
+        //retrurn tokens to the user/client
         user.password = undefined;
         user.__v = undefined;
         res.json({
           status: "success",
           message: "Login success!!!",
           user,
+          tokens: {
+            accessJWT: await signAccessJWT({ email }),
+            refreshJWT: await signRefreshJWT({ email }),
+          },
         });
         return;
         //here return will stop the process once login succefull.

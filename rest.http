@@ -23,18 +23,26 @@ Content-Type: application/json
 "Live@123",
 "phone": "12343456"}
 
-# login user
+### login user
+
 POST {{url}}/admin/login
 Content-Type: application/json
+
 {
     "email":"Shital@gmail.com",
     "password":"Sr@1234"
 }
 
-//category mgmt api
-POST {{url}}/categories
+###category mgmt api
+POST {{url}}/category
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IlNoaXRhbEBnbWFpbC5jb20iLCJpYXQiOjE2Nzg2Njc1MzUsImV4cCI6MTY3ODY2ODQzNX0.alKZtlSN3EbJ5K4rUN7mkW3FiFLprYq_RW7rE0Pdn10
 
 {
-    "name":"Computer"
+    "name":"Computey"
 }
+
+### get categories
+PUT {{url}}/categories
+Content-Type: application/application/json
+
