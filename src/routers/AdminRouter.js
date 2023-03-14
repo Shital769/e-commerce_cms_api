@@ -29,7 +29,7 @@ import {
   passwordUpdateNotification,
 } from "../util/nodemailer.js";
 import { numString } from "../util/randomGenerator.js";
-import { isAuth } from "../middlewares/authMiddleware";
+import { isAuth } from "../middlewares/authMiddleware.js";
 
 //admin user login
 router.post("/login", loginValidation, async (req, res, next) => {
@@ -239,6 +239,7 @@ router.get("/user-profile", isAuth, (req, res, next) => {
     res.json({
       status: "success",
       message: "user found",
+      user,
     });
   } catch (error) {
     next(error);
