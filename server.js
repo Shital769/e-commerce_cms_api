@@ -21,10 +21,12 @@ app.use(morgan("dev"));
 import adminRouter from "./src/routers/AdminRouter.js";
 import categoryRouter from "./src/routers/categoryRouter.js";
 import paymentMethodRouter from "./src/routers/paymentMethodRouter.js";
-import {isAuth} from "./src/middlewares/authMiddleware.js"
+import { isAuth } from "./src/middlewares/authMiddleware.js";
+import productRouter from "./src/routers/productRouter.js";
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/category", isAuth, categoryRouter);
 app.use("/api/v1/payment", paymentMethodRouter);
+app.use("/api/v1/product", isAuth, productRouter);
 
 //root url  request
 app.use("/", (req, res, next) => {
