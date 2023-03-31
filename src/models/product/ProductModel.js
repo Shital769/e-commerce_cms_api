@@ -11,6 +11,11 @@ export const getAllProducts = () => {
 export const getSingleProduct = (filter) => {
   return ProductSchema.findOne(filter);
 };
+
+export const getSelectedProduct = (filter) => {
+  return ProductSchema.findOne(filter);
+};
+
 export const getProductById = (_id) => {
   return ProductSchema.findById(_id);
 };
@@ -24,8 +29,8 @@ export const deleteSingleProduct = (filter) => {
 };
 
 //ids Arr must be an array of _id
-export const deleteProducts = (isArg) => {
+export const deleteProducts = (idsArg) => {
   return ProductSchema.deleteMany({
-    _id: { $in: Arg },
+    _id: { $in: idsArg },
   });
 };

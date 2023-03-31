@@ -9,6 +9,7 @@ import {
   readCategory,
   updateCategory,
 } from "../models/category/CategoryModel.js";
+import { getSelectedProduct } from "../models/product/ProductModel.js";
 
 //create  category
 router.post("/", async (req, res, next) => {
@@ -87,6 +88,19 @@ router.put("/", updateCategoryValidation, async (req, res, next) => {
 //delete category
 router.delete("/:_id", async (req, res, next) => {
   const { _id } = req.params;
+
+  //get all the product that has parentCtaegory === -id
+  const productList = await getSelectedProduct({ parentCategory: _id });
+  if (productList.length) {
+    const names = productList.map(({ name }) => name).toString();
+    return res.json({
+      status: "error",
+      message:
+        "Please re assign category for the following product before you can delete this category: " +
+        names,
+    });
+  }
+
   const result = await deleteCategory(_id);
 
   if (result?._id) {
