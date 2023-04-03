@@ -33,7 +33,7 @@ app.use("/", (req, res, next) => {
   const error = {
     message: "You dont have permisssion here",
   };
-  next(error);
+  res.json(error);
 });
 
 //global error handler
